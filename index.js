@@ -1,6 +1,7 @@
 const core = require("@actions/core");
 const minimatch = require("minimatch");
 const parse = require("lcov-parse");
+const reportgen = require('./report-generator/generate-report');
 
 function run() {
   const lcovPath = core.getInput("path");
@@ -13,15 +14,50 @@ function run() {
       core.setFailed("parsing error!");
       return;
     }
-    let totalFinds = 0;
-    let totalHits = 0;
+    let totalLinesFound = 0;
+    let totalLinesHit = 0;
+    let totalFunctionsFound = 0;
+    let totalFunctionsHit = 0;
+    let totalBranchesFound = 0;
+    let totalBranchesHit = 0;
+
+    const filesTemplateData = [];
+
     data.forEach(element => {
       if (shouldCalculateCoverageForFile(element["file"], excludedFiles)) {
-        totalHits += element['lines']['hit'];
-        totalFinds += element['lines']['found'];
+        totalLinesHit += element['lines']['hit'];
+        totalLinesFound += element['lines']['found'];
+        totalFunctionsFound += element['functions']['hit'];
+        totalFunctionsHit += element['functions']['found'];
+        totalBranchesHit += element['branches']['hit'];
+        totalBranchesFound += element['branches']['found'];
       }
+
+      filesTemplateData.push({
+        path: element['file'],
+        linesHit: element['lines']['hit'],
+        linesFound: element['lines']['found'],
+        functionsHit: element['functions']['hit'],
+        functionsFound: element['functions']['found'],
+        branchesHit: element['branches']['hit'],
+        branchesFound: element['branches']['found'],
+      });
     });
-    const coverage = (totalHits / totalFinds) * 100;
+
+    const templateData = {
+      totalLinesHit,
+      totalLinesFound,
+      totalFunctionsHit,
+      totalFunctionsFound,
+      totalBranchesHit,
+      totalBranchesFound,
+      files: filesTemplateData,
+      date: new Date(Date.now()),
+    };
+
+    reportgen.generateHtml(templateData);
+
+    const coverage = (totalLinesHit / totalLinesFound) * 100;
     const isValidBuild = coverage >= minCoverage;
     if (!isValidBuild) {
       core.setFailed(`Coverage ${coverage} is below the minimum ${minCoverage} expected`);

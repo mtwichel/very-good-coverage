@@ -79,3 +79,4 @@ test("fails when the coverage is below the given min_threshold", () => {
     expect(err).toBeDefined();
   }
 });
+

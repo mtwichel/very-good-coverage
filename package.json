@@ -30,7 +30,8 @@
   "dependencies": {
     "@actions/core": "^1.2.5",
     "lcov-parse": "^1.0.0",
-    "minimatch": "^3.0.4"
+    "minimatch": "^3.0.4",
+    "handlebars": "^4.7.6"
   },
   "devDependencies": {
     "@vercel/ncc": "^0.24.1",

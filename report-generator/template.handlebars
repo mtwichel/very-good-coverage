@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Coverage Report</title>
+    <style>
+        * {
+            font-family: sans-serif;
+        }
+
+        body {
+            padding: 0% 5%;
+        }
+
+        .flex-container {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-between;
+        }
+
+        table.main-table {
+            width: 100%;
+        }
+
+        table.main-table th {
+            color: #FFF;
+            background-color: cornflowerblue;
+            font-size: larger;
+        }
+
+        td,
+        th,
+        span {
+            padding: 0.4em;
+            vertical-align: middle;
+        }
+
+        .green {
+            background-color: lightgreen;
+        }
+
+        .yellow {
+            background-color: gold;
+        }
+
+        .red {
+            background-color: red;
+        }
+
+        td.bold {
+            font-weight: 800;
+        }
+
+        td.default {
+            color: dodgerblue;
+            background-color: skyblue;
+            padding: 0.25em;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Code Coverage Report</h1>
+    <hr>
+    <div class='flex-container'>
+        <div>
+            <p><strong>Current View: </strong> top level</p>
+            <p><strong>Date: </strong> {{prettyDate date}}</p>
+            <p><strong>Legend: </strong>
+                <span class="red">low: < 75%</span>
+                        <span class="yellow">medium: >= 75% < 100%</span>
+                                <span class="green">perfect: 100%</span></p>
+        </div>
+        <div>
+            <table class="summary-table">
+                <tr>
+                    <td></td>
+                    <td>Hit</td>
+                    <td>Total</td>
+                    <td>Coverage</td>
+                </tr>
+                <tr>
+                    <td class="bold">Lines:</td>
+                    <td class="default">{{totalLinesHit}}</td>
+                    <td class="default">{{totalLinesFound}}</td>
+                    <td class="{{coverageColor totalLinesHit totalLinesFound}}">
+                        {{coverage totalLinesHit totalLinesFound}}</td>
+                </tr>
+                <tr>
+                    <td class="bold">Functions:</td>
+                    <td class="default">{{totalFunctionsHit}}</td>
+                    <td class="default">{{totalFunctionsFound}}</td>
+                    <td class="{{coverageColor totalFunctionsHit totalFunctionsFound}}">
+                        {{coverage totalFunctionsHit totalFunctionsFound}}</td>
+                </tr>
+                <tr>
+                    <td class="bold">Branches:</td>
+                    <td class="default">{{totalBranchesHit}}</td>
+                    <td class="default">{{totalBranchesFound}}</td>
+                    <td class="{{coverageColor totalBranchesHit totalBranchesFound}}">
+                        {{coverage totalBranchesHit totalBranchesFound}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <hr>
+    <table class=" main-table">
+        <tr>
+            <th>Directory</th>
+            <th colspan="2">Line Coverage</th>
+            <th colspan="2">Functions</th>
+            <th colspan="2">Branches</th>
+        </tr>
+        {{#each files as |file|}}
+        <tr>
+            <td class="default">{{file.path}}</td>
+            <td class="{{coverageColor file.linesHit file.linesFound}} bold">
+                {{coverage file.linesHit file.linesFound}}
+            </td>
+            <td class="{{coverageColor file.linesHit file.linesFound}}">
+                {{file.linesHit}} / {{file.linesFound}}
+            </td>
+            <td class="{{coverageColor file.functionsHit file.functionsFound}} bold">
+                {{coverage file.functionsHit file.functionsFound}}
+            </td>
+            <td class="{{coverageColor file.functionsHit file.functionsFound}}">
+                {{file.functionsHit}} / {{file.functionsFound}}
+            </td>
+            <td class="{{coverageColor file.branchesHit file.branchesFound}} bold">
+                {{coverage file.branchesHit file.branchesFound}}
+            </td>
+            <td class="{{coverageColor file.branchesHit file.branchesFound}}">
+                {{file.branchesHit}} / {{file.branchesFound}}
+            </td>
+        </tr>
+        {{/each}}
+    </table>
+</body>
+
+</html>
