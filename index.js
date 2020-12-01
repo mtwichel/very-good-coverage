@@ -27,7 +27,7 @@ function run() {
     const coverage = (totalHits / totalFinds) * 100;
     const isValidBuild = coverage >= minCoverage;
     if (!isValidBuild) {
-      core.setFailed(`${coverage} is less than min_coverage ${minCoverage}`);
+      core.setFailed(`${coverage} is less than min_coverage ${minCoverage} (${totalHits} hit out of ${totalFinds} found)`);
     }
   });
 }
